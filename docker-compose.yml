@@ -1,0 +1,20 @@
+services:
+  api:
+    # Build the image using the Dockerfile in the current directory
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    # Persist the SQLite database using a Docker volume
+    volumes:
+      - sqlite_data:/app/data
+    environment:
+      # Tell the app to create/use the SQLite db inside the persisted volume directory
+      - DATABASE_URL=sqlite:////app/data/app.db
+      - SECRET_KEY=change-this-in-production
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=60
+
+volumes:
+  # Define the named volume for SQLite data persistence
+  sqlite_data:
